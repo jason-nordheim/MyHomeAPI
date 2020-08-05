@@ -5,10 +5,15 @@ class AuthenticationController < ApplicationController
     @user = User.find_by(username: params[:username])    
     if @user
         if @user.authenticate(params[:password]) 
-          payload = { user_id: @user.id }
-          token = JWT.encode(payload, Rails.application.secrets.secret_key_base)
-          
-          render json: { token: token }, status: :created
+          begin
+            payload = { user_id: @user.id }
+            token = JWT.encode(payload, Rails.application.secrets.secret_key_base)            
+            render json: { token: token }, status: :created
+          rescue => exception
+            render json: { error: exception }
+          else
+            
+          end
         else 
           render json: { error: "Invalid Password"}, status: :unauthorized 
         end 
