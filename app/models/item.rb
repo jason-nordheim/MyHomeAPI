@@ -1,4 +1,5 @@
 class Item < ApplicationRecord
-  belongs_to :User 
-  belongs_to :Vendor 
+  belongs_to :user 
+  belongs_to :vendor 
+  belongs_to :location
 end
