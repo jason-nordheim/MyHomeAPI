@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_05_175814) do
+ActiveRecord::Schema.define(version: 2020_08_05_211651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,16 +19,33 @@ ActiveRecord::Schema.define(version: 2020_08_05_175814) do
     t.string "name"
     t.float "est_value"
     t.float "acc_value"
-    t.date "purchase_date"
-    t.boolean "selling"
+    t.date "purchase_date", default: "2020-08-05"
+    t.boolean "selling", default: false
     t.text "description"
-    t.string "category"
+    t.string "category", default: "Uncategorized"
+    t.string "serial"
     t.bigint "users_id"
     t.bigint "vendors_id"
+    t.bigint "locations_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["locations_id"], name: "index_items_on_locations_id"
     t.index ["users_id"], name: "index_items_on_users_id"
     t.index ["vendors_id"], name: "index_items_on_vendors_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+    t.string "street1"
+    t.string "street2"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.string "type"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_locations_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -52,11 +69,10 @@ ActiveRecord::Schema.define(version: 2020_08_05_175814) do
     t.string "phone"
     t.string "email"
     t.text "description"
-    t.bigint "users_id", null: false
+    t.bigint "users_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["users_id"], name: "index_vendors_on_users_id"
   end
 
-  add_foreign_key "vendors", "users", column: "users_id"
 end
